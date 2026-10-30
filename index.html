@@ -1,1 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おしゃべり ふりかえり</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            touch-action: manipulation;
+        }
+        .animate-bounce-short {
+            animation: bounce 0.5s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen text-gray-800 pb-12">
+
+    <!-- ヘッダー -->
+    <header class="bg-emerald-600 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
+        <h1 class="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2">
+            ⭐ おしゃべり ふりかえり ⭐
+        </h1>
+        <button onclick="openTeacherLogin()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 border border-emerald-500">
+            👤 せんせいよう
+        </button>
+    </header>
+
+    <main class="max-w-2xl mx-auto p-4">
+
+        <!-- PAGE 1: クラス選択 -->
+        <section id="page-1" class="space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-emerald-100 text-center">
+                <h2 class="text-2xl font-bold text-emerald-800 mb-4">なにぐみですか？</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="selectClass('1くみ')" class="class-btn p-5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-2xl font-bold text-emerald-800 hover:bg-emerald-100 active:scale-95 transition-all">1くみ</button>
+                    <button onclick="selectClass('2くみ')" class="class-btn p-5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-2xl font-bold text-emerald-800 hover:bg-emerald-100 active:scale-95 transition-all">2くみ</button>
+                    <button onclick="selectClass('3くみ')" class="class-btn p-5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-2xl font-bold text-emerald-800 hover:bg-emerald-100 active:scale-95 transition-all">3くみ</button>
+                    <button onclick="selectClass('4くみ')" class="class-btn p-5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-2xl font-bold text-emerald-800 hover:bg-emerald-100 active:scale-95 transition-all">4くみ</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: 出席番号入力 -->
+        <section id="page-2" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-emerald-100 text-center">
+                <h2 class="text-2xl font-bold text-emerald-800 mb-2">しゅっせきばんごうは？</h2>
+                <p class="text-sm text-gray-500 mb-4">ばんごうを おしてね</p>
+                
+                <div id="number-display" class="text-4xl font-extrabold text-emerald-600 bg-emerald-50 py-3 rounded-2xl border-2 border-dashed border-emerald-200 mb-6 h-16 flex items-center justify-center">
+                    -- 番
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto mb-6">
+                    <button onclick="pressNum('1')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">1</button>
+                    <button onclick="pressNum('2')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">2</button>
+                    <button onclick="pressNum('3')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">3</button>
+                    <button onclick="pressNum('4')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">4</button>
+                    <button onclick="pressNum('5')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">5</button>
+                    <button onclick="pressNum('6')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">6</button>
+                    <button onclick="pressNum('7')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">7</button>
+                    <button onclick="pressNum('8')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">8</button>
+                    <button onclick="pressNum('9')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">9</button>
+                    <button onclick="clearNum()" class="p-4 bg-rose-50 border-2 border-rose-200 text-rose-600 rounded-2xl text-lg font-bold">けす</button>
+                    <button onclick="pressNum('0')" class="p-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold active:bg-emerald-100">0</button>
+                    <button onclick="confirmNumber()" class="p-4 bg-emerald-500 text-white rounded-2xl text-lg font-bold shadow-md active:scale-95">OK</button>
+                </div>
+                <button onclick="navigateTo(1)" class="text-sm text-gray-500 underline">← もどる</button>
+            </div>
+        </section>
+
+        <!-- PAGE 3: 教科選択 -->
+        <section id="page-3" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-emerald-100 text-center">
+                <h2 class="text-2xl font-bold text-emerald-800 mb-4">きょうこうは なに？</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="selectSubject('こくご')" class="p-4 bg-amber-50 border-2 border-amber-200 rounded-2xl text-xl font-bold text-amber-900 hover:bg-amber-100 active:scale-95">📕 こくご</button>
+                    <button onclick="selectSubject('さんすう')" class="p-4 bg-blue-50 border-2 border-blue-200 rounded-2xl text-xl font-bold text-blue-900 hover:bg-blue-100 active:scale-95">📐 さんすう</button>
+                    <button onclick="selectSubject('せいかつ')" class="p-4 bg-emerald-50 border-2 border-emerald-200 rounded-2xl text-xl font-bold text-emerald-900 hover:bg-emerald-100 active:scale-95">🌱 せいかつ</button>
+                    <button onclick="selectSubject('おんがく')" class="p-4 bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-purple-900 hover:bg-purple-100 active:scale-95">🎵 おんがく</button>
+                    <button onclick="selectSubject('ずこう')" class="p-4 bg-pink-50 border-2 border-pink-200 rounded-2xl text-xl font-bold text-pink-900 hover:bg-pink-100 active:scale-95">🎨 ずこう</button>
+                    <button onclick="selectSubject('たいいく')" class="p-4 bg-orange-50 border-2 border-orange-200 rounded-2xl text-xl font-bold text-orange-900 hover:bg-orange-100 active:scale-95">🏃 たいいく</button>
+                    <button onclick="selectSubject('どうとく')" class="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-2xl text-xl font-bold text-yellow-900 hover:bg-yellow-100 active:scale-95">心 どうとく</button>
+                    <button onclick="selectSubject('とくかつ')" class="p-4 bg-teal-50 border-2 border-teal-200 rounded-2xl text-xl font-bold text-teal-900 hover:bg-teal-100 active:scale-95">🏫 とくかつ</button>
+                </div>
+                <div class="mt-6 flex justify-between">
+                    <button onclick="navigateTo(2)" class="text-sm text-gray-500 underline">← もどる</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: テーマ複数選択 -->
+        <section id="page-4" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-emerald-100 text-center">
+                <h2 class="text-2xl font-bold text-emerald-800 mb-1">がんばったことは？</h2>
+                <p class="text-xs text-gray-500 mb-4">いくつ えらんでも いいよ！</p>
+                
+                <div id="topic-container" class="grid grid-cols-1 gap-3 mb-6 text-left">
+                    <!-- JSで動的に追加されます -->
+                </div>
+
+                <button onclick="confirmTopics()" class="w-full py-4 bg-emerald-500 text-white font-extrabold text-xl rounded-2xl shadow-lg hover:bg-emerald-600 active:scale-95 transition-all">
+                    けっていして つぎへ ➔
+                </button>
+                <div class="mt-4">
+                    <button onclick="navigateTo(3)" class="text-sm text-gray-500 underline">← きょうかを えらびなおす</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: 本文入力（音声＋途中編集） -->
+        <section id="page-5" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-emerald-100">
+                <h2 class="text-xl font-bold text-emerald-800 mb-2 text-center">ふりかえりを はなそう・かこう</h2>
+                
+                <!-- 入力エリア（カーソル位置からの編集に対応） -->
+                <div class="relative mb-4">
+                    <textarea id="reflection-text" rows="5" placeholder="マイクを おして はなすか、キーボードで かいてね。とおちゅうを つついて なおすことも できるよ！" class="w-full p-4 border-2 border-emerald-200 rounded-2xl text-lg focus:outline-none focus:border-emerald-500 leading-relaxed"></textarea>
+                </div>
+
+                <!-- 音声入力ボタン -->
+                <div class="flex justify-center mb-6">
+                    <button id="mic-btn" onclick="toggleSpeech()" class="px-6 py-4 bg-rose-500 text-white rounded-full font-bold text-lg shadow-lg flex items-center gap-2 hover:bg-rose-600 active:scale-95 transition-all">
+                        <span class="text-2xl">🎤</span>
+                        <span id="mic-status-text">おはなしして 入力</span>
+                    </button>
+                </div>
+
+                <button onclick="submitReflection()" class="w-full py-4 bg-emerald-500 text-white font-extrabold text-xl rounded-2xl shadow-lg hover:bg-emerald-600 active:scale-95 transition-all">
+                    できた！ (そうしん) 🚀
+                </button>
+                <div class="mt-4 text-center">
+                    <button onclick="navigateTo(4)" class="text-sm text-gray-500 underline">← もどる</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 6: 送信完了 -->
+        <section id="page-6" class="hidden text-center space-y-6 py-8">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border-2 border-emerald-100 space-y-4">
+                <div class="text-6xl animate-bounce-short">💮</div>
+                <h2 class="text-3xl font-extrabold text-emerald-800">できました！</h2>
+                <p class="text-gray-600">せんせいのに とどいたよ。<br>きょうも よく がんばったね！</p>
+                <button onclick="resetApp()" class="w-full py-4 bg-emerald-500 text-white font-bold text-xl rounded-2xl shadow-md active:scale-95">
+                    さいしょに もどる
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE 8: 先生用画面 -->
+        <section id="page-8" class="hidden space-y-6">
+            <div class="bg-gray-800 text-white p-6 rounded-3xl shadow-lg space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        👥 じどうの ふりかえり いちらん（せんせいよう）
+                    </h2>
+                    <button onclick="resetApp()" class="text-xs bg-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-600">じどうよう画面へ</button>
+                </div>
+                
+                <div id="teacher-list-container" class="space-y-3 max-h-96 overflow-y-auto text-gray-800">
+                    <!-- 送信履歴一覧 -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- 設定：GASのWebアプリURL（ここにURLを貼れば全端末自動連動） ---
+        const MY_GAS_URL = 'https://script.google.com/macros/s/ここにあなたのGASのURLを入れる/exec';
+
+        // 教科別テーマの定義
+        const topicOptions = {
+            'こくご': ['たのしかったこと', 'じょうずに よめた・かけたた', 'こえを だして よめた', 'かんじを 正しく かけた', 'じぶんの かんがえを つたえられた'],
+            'さんすう': ['たのしかったこと', 'まちがえずに けいさんできた', 'ずや しきを使って かんがえられた', 'もんだいの いみが わかった', 'とけいの よみかたが わかった'],
+            'せいかつ': ['たのしかったこと', 'じぶんから すすんで 行動できた', 'きづいたことを はなせた', 'ともだちと きょうりょくできた', 'いきものや しくぶつを かんさつできた'],
+            'おんがく': ['たのしかったこと', 'たのしく うたえた', 'がっきを じょうずに えんそうできた', 'リズムに あわせて うごけた'],
+            'ずこう': ['たのしかったこと', 'くふうして つくれた', 'さいごまで あきらめずに つくれた', 'どうぐを 正しく つかえた'],
+            'たいいく': ['たのしかったこと', 'めあてに むかって がんばれた', 'ルールを まもって たのしめた', 'からだを いっぱい うごかせた'],
+            'どうとく': ['たのしかったこと', 'ともだちの かんがえを きけた', 'じぶんの おもいを はなせた', 'これからの せいかつにいかしたい'],
+            'とくかつ': ['たのしかったこと', 'みんなで きょうりょくできた', 'かかりの しごとを がんばれた', 'はなしあいに さんかできた']
+        };
+
+        // アプリの状態
+        let selectedClass = '';
+        let studentNumber = '';
+        let selectedSubject = '';
+        let selectedTopics = [];
+        let recognition = null;
+        let isRecording = false;
+
+        function navigateTo(pageNumber) {
+            for (let i = 1; i <= 8; i++) {
+                const el = document.getElementById(`page-${i}`);
+                if (el) el.classList.add('hidden');
+            }
+            document.getElementById(`page-${pageNumber}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function selectClass(cls) {
+            selectedClass = cls;
+            navigateTo(2);
+        }
+
+        function pressNum(num) {
+            if (studentNumber.length < 2) {
+                studentNumber += num;
+                updateNumDisplay();
+            }
+        }
+
+        function clearNum() {
+            studentNumber = '';
+            updateNumDisplay();
+        }
+
+        function updateNumDisplay() {
+            const display = document.getElementById('number-display');
+            display.innerText = studentNumber ? `${studentNumber} 番` : '-- 番';
+        }
+
+        function confirmNumber() {
+            if (!studentNumber) {
+                alert('ばんごうを 入力してください');
+                return;
+            }
+            navigateTo(3);
+        }
+
+        function selectSubject(subject) {
+            selectedSubject = subject;
+            selectedTopics = [];
+            
+            // テーマ選択肢の生成
+            const container = document.getElementById('topic-container');
+            container.innerHTML = '';
+            
+            const options = topicOptions[subject] || ['たのしかったこと', 'むずかしかったこと', 'がんばったこと'];
+            options.forEach(topic => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'topic-btn p-4 bg-white border-2 border-emerald-200 rounded-2xl font-bold text-gray-700 hover:bg-emerald-50 active:scale-95 transition-all text-left flex items-center justify-between';
+                btn.onclick = () => toggleTopic(topic, btn);
+                btn.innerHTML = `<span>${topic}</span><span class="check-icon text-xl opacity-0">✅</span>`;
+                container.appendChild(btn);
+            });
+
+            navigateTo(4);
+        }
+
+        function toggleTopic(topic, btnEl) {
+            const index = selectedTopics.indexOf(topic);
+            const checkIcon = btnEl.querySelector('.check-icon');
+
+            if (index === -1) {
+                selectedTopics.push(topic);
+                btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                btnEl.classList.remove('bg-white', 'border-emerald-200', 'text-gray-700');
+                checkIcon.classList.remove('opacity-0');
+            } else {
+                selectedTopics.splice(index, 1);
+                btnEl.classList.remove('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                btnEl.classList.add('bg-white', 'border-emerald-200', 'text-gray-700');
+                checkIcon.classList.add('opacity-0');
+            }
+        }
+
+        function confirmTopics() {
+            if (selectedTopics.length === 0) {
+                alert('ひとつ以上 がんばったことを えらんでね！');
+                return;
+            }
+            navigateTo(5);
+        }
+
+        // 音声認識（カーソル位置への挿入に対応）
+        function toggleSpeech() {
+            if (isRecording) {
+                stopSpeech();
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('お使いのブラウザは おんせい入力に たいのうしていません。');
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ja-JP';
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                document.getElementById('mic-btn').classList.add('bg-red-600', 'animate-pulse');
+                document.getElementById('mic-status-text').innerText = 'きいています... (おして ていし)';
+            };
+
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                insertTextAtCursor(document.getElementById('reflection-text'), text);
+            };
+
+            recognition.onerror = () => stopSpeech();
+            recognition.onend = () => stopSpeech();
+
+            recognition.start();
+        }
+
+        function stopSpeech() {
+            isRecording = false;
+            if (recognition) recognition.stop();
+            const btn = document.getElementById('mic-btn');
+            if (btn) {
+                btn.classList.remove('bg-red-600', 'animate-pulse');
+                btn.classList.add('bg-rose-500');
+                document.getElementById('mic-status-text').innerText = 'おはなしして 入力';
+            }
+        }
+
+        // テキストエリアのカーソル位置に文字を挿入する処理
+        function insertTextAtCursor(textarea, text) {
+            const startPos = textarea.selectionStart;
+            const endPos = textarea.selectionEnd;
+            const existingText = textarea.value;
+
+            textarea.value = existingText.substring(0, startPos) + text + existingText.substring(endPos);
+            textarea.selectionStart = startPos + text.length;
+            textarea.selectionEnd = startPos + text.length;
+            textarea.focus();
+        }
+
+        // 送信処理
+        function submitReflection() {
+            const content = document.getElementById('reflection-text').value;
+            if (!content && selectedTopics.length === 0) {
+                alert('ふりかえりを 入力してね');
+                return;
+            }
+
+            const payload = {
+                date: new Date().toLocaleString('ja-JP'),
+                studentClass: selectedClass,
+                studentNumberOnly: studentNumber,
+                subject: selectedSubject,
+                topic: selectedTopics.join('、'), // 複数選択したテーマを「、」区切りでスプシに送信
+                content: content,
+                stamp: ''
+            };
+
+            // ローカルストレージに保存（先生用画面一覧用）
+            const history = JSON.parse(localStorage.getItem('reflection_history') || '[]');
+            history.unshift(payload);
+            localStorage.getItem('reflection_history', JSON.stringify(history));
+
+            // GASへデータPOST送信
+            const gasUrl = MY_GAS_URL || localStorage.getItem('gas_webapp_url');
+            if (gasUrl && gasUrl.startsWith('http')) {
+                fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error(err));
+            }
+
+            navigateTo(6);
+        }
+
+        function resetApp() {
+            studentNumber = '';
+            selectedClass = '';
+            selectedSubject = '';
+            selectedTopics = [];
+            document.getElementById('reflection-text').value = '';
+            updateNumDisplay();
+            navigateTo(1);
+        }
+
+        function openTeacherLogin() {
+            const pass = prompt('パスワードを 入力してください:');
+            if (pass === '1234') {
+                renderTeacherList();
+                navigateTo(8);
+            } else if (pass !== null) {
+                alert('パスワードが ちがいます');
+            }
+        }
+
+        function renderTeacherList() {
+            const history = JSON.parse(localStorage.getItem('reflection_history') || '[]');
+            const container = document.getElementById('teacher-list-container');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<div class="bg-white p-4 rounded-xl text-center text-gray-500">データがありません</div>';
+                return;
+            }
+
+            container.innerHTML = history.map(item => `
+                <div class="bg-white p-4 rounded-xl shadow border-l-4 border-emerald-500 space-y-1">
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>${item.date}</span>
+                        <span class="font-bold text-emerald-700">${item.studentClass} ${item.studentNumberOnly}番</span>
+                    </div>
+                    <div class="text-sm font-bold text-gray-800">
+                        【${item.subject}】 ${item.topic}
+                    </div>
+                    <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
+                        ${item.content || '(本文なし)'}
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
 
